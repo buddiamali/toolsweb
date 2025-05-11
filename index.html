@@ -1,127 +1,157 @@
+      
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Converter Tool</title>
-      <style>
-document.addEventListener('DOMContentLoaded', () => {
-    // --- Mobile Navigation Toggle ---
-    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-    const mainNav = document.querySelector('.main-nav');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools Hub - Your Daily Tools, All in One Place</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
+</head>
+<body>
 
-    if (mobileNavToggle && mainNav) {
-        mobileNavToggle.addEventListener('click', () => {
-            mainNav.classList.toggle('active');
-            mobileNavToggle.classList.toggle('active');
-            const isExpanded = mainNav.classList.contains('active');
-            mobileNavToggle.setAttribute('aria-expanded', isExpanded);
-        });
+    <!-- ... (All your HTML content from Top Header to Footer) ... -->
 
-        // Close mobile nav when a link is clicked
-        mainNav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (mainNav.classList.contains('active')) {
-                    mainNav.classList.remove('active');
-                    mobileNavToggle.classList.remove('active');
-                    mobileNavToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-        });
-    }
+    <!-- Footer -->
+    <footer id="contact" class="site-footer-main">
+        <div class="container footer-content">
+            <div class="footer-info">
+                <div class="logo">Tools Wonder</div>
+                <p>Simplifying your digital life.</p>
+            </div>
+            <div class="footer-contact-info">
+                <p>Contact us:</p>
+                <a href="mailto:toolshub@gmail.com">toolshub@gmail.com</a>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a>
+            </div>
+        </div>
+    </footer>
 
-    // --- Live Tool Search ---
-    const searchInput = document.getElementById('toolSearch');
-    const toolCards = document.querySelectorAll('.tool-card');
-    const toolCategories = document.querySelectorAll('.tool-category');
-    
-    // Create a no-results message if it doesn't exist
-    let noResultsMessage = document.querySelector('.no-results');
-    if (!noResultsMessage && toolCategories.length > 0) {
-        noResultsMessage = document.createElement('p');
-        noResultsMessage.className = 'no-results';
-        noResultsMessage.textContent = 'No tools found matching your search.';
-        // Insert after the search bar, or at a suitable place
-        const searchSection = document.querySelector('.search-section .container');
-        if (searchSection) {
-            searchSection.appendChild(noResultsMessage);
-        }
-    }
+    <script>
+        // --- JavaScript from script.js ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Mobile Navigation Toggle ---
+            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+            const mainNav = document.querySelector('.main-nav');
 
-
-    if (searchInput && toolCards.length > 0) {
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            let visibleToolsCount = 0;
-
-            toolCategories.forEach(category => {
-                let categoryHasVisibleTools = false;
-                const cardsInCategory = category.querySelectorAll('.tool-card');
-                
-                cardsInCategory.forEach(card => {
-                    const toolName = card.dataset.toolName ? card.dataset.toolName.toLowerCase() : '';
-                    const keywords = card.dataset.keywords ? card.dataset.keywords.toLowerCase() : '';
-                    
-                    if (toolName.includes(searchTerm) || keywords.includes(searchTerm)) {
-                        card.style.display = 'block';
-                        categoryHasVisibleTools = true;
-                        visibleToolsCount++;
-                    } else {
-                        card.style.display = 'none';
-                    }
+            if (mobileNavToggle && mainNav) {
+                mobileNavToggle.addEventListener('click', () => {
+                    mainNav.classList.toggle('active');
+                    mobileNavToggle.classList.toggle('active');
+                    const isExpanded = mainNav.classList.contains('active');
+                    mobileNavToggle.setAttribute('aria-expanded', isExpanded);
                 });
 
-                // Hide or show category based on whether it has visible tools
-                if (categoryHasVisibleTools) {
-                    category.style.display = 'block';
-                } else {
-                    category.style.display = 'none';
-                }
-            });
-            
-            // Show or hide no-results message
-            if (noResultsMessage) {
-                if (visibleToolsCount === 0 && searchTerm !== '') {
-                    noResultsMessage.style.display = 'block';
-                } else {
-                    noResultsMessage.style.display = 'none';
+                // Close mobile nav when a link is clicked
+                mainNav.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (mainNav.classList.contains('active')) {
+                            mainNav.classList.remove('active');
+                            mobileNavToggle.classList.remove('active');
+                            mobileNavToggle.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                });
+            }
+
+            // --- Live Tool Search ---
+            const searchInput = document.getElementById('toolSearch');
+            const toolCards = document.querySelectorAll('.tool-card');
+            const toolCategories = document.querySelectorAll('.tool-category');
+
+            // Create a no-results message if it doesn't exist
+            let noResultsMessage = document.querySelector('.no-results');
+            if (!noResultsMessage && toolCategories.length > 0) {
+                noResultsMessage = document.createElement('p');
+                noResultsMessage.className = 'no-results';
+                noResultsMessage.textContent = 'No tools found matching your search.';
+                // Insert after the search bar, or at a suitable place
+                const searchSection = document.querySelector('.search-section .container');
+                if (searchSection) {
+                    searchSection.appendChild(noResultsMessage);
                 }
             }
 
-            // If search is empty, ensure all categories are visible
-            if (searchTerm === '') {
-                toolCategories.forEach(category => category.style.display = 'block');
-            }
-        });
-    }
 
-    // --- Smooth scroll for nav links ---
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            // Only prevent default if it's a true hash link within the page
-            if (this.hash !== "" && document.querySelector(this.hash)) {
-                e.preventDefault();
-                const targetElement = document.querySelector(this.hash);
-                if (targetElement) {
-                    const headerOffset = document.querySelector('.site-header') ? document.querySelector('.site-header').offsetHeight : 0;
-                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-                    const offsetPosition = elementPosition - headerOffset - 20; // 20px extra spacing
+            if (searchInput && toolCards.length > 0) {
+                searchInput.addEventListener('input', (e) => {
+                    const searchTerm = e.target.value.toLowerCase().trim();
+                    let visibleToolsCount = 0;
 
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth"
+                    toolCategories.forEach(category => {
+                        let categoryHasVisibleTools = false;
+                        const cardsInCategory = category.querySelectorAll('.tool-card');
+
+                        cardsInCategory.forEach(card => {
+                            const toolName = card.dataset.toolName ? card.dataset.toolName.toLowerCase() : '';
+                            const keywords = card.dataset.keywords ? card.dataset.keywords.toLowerCase() : '';
+
+                            if (toolName.includes(searchTerm) || keywords.includes(searchTerm)) {
+                                card.style.display = 'block';
+                                categoryHasVisibleTools = true;
+                                visibleToolsCount++;
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+
+                        // Hide or show category based on whether it has visible tools
+                        if (searchTerm === '') { // If search is empty, show all categories
+                            category.style.display = 'block';
+                            // Also ensure all cards within the category are shown
+                            cardsInCategory.forEach(card => card.style.display = 'block');
+                        } else {
+                            if (categoryHasVisibleTools) {
+                                category.style.display = 'block';
+                            } else {
+                                category.style.display = 'none';
+                            }
+                        }
                     });
 
-                    // Update active nav link
-                    document.querySelectorAll('.main-nav a').forEach(navLink => navLink.classList.remove('active'));
-                    if (!this.closest('.footer-links')) { // Don't mark footer links as active nav
-                         this.classList.add('active');
+                    // Show or hide no-results message
+                    if (noResultsMessage) {
+                        if (visibleToolsCount === 0 && searchTerm !== '') {
+                            noResultsMessage.style.display = 'block';
+                        } else {
+                            noResultsMessage.style.display = 'none';
+                        }
                     }
-                }
+                });
             }
+
+            // --- Smooth scroll for nav links ---
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    // Only prevent default if it's a true hash link within the page
+                    if (this.hash !== "" && document.querySelector(this.hash)) {
+                        e.preventDefault();
+                        const targetElement = document.querySelector(this.hash);
+                        if (targetElement) {
+                            const headerOffset = document.querySelector('.site-header') ? document.querySelector('.site-header').offsetHeight : 0;
+                            const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                            const offsetPosition = elementPosition - headerOffset - 20; // 20px extra spacing
+
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: "smooth"
+                            });
+
+                            // Update active nav link
+                            document.querySelectorAll('.main-nav a').forEach(navLink => navLink.classList.remove('active'));
+                            if (!this.closest('.footer-links')) { // Don't mark footer links as active nav
+                                 this.classList.add('active');
+                            }
+                        }
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
 </body>
 </html>
+
+    
