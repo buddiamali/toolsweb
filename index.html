@@ -11,6 +11,126 @@
 </head>
 <body>
 
+      <script>
+    // Paste the entire content of script.js here
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Mobile Navigation Toggle ---
+        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+        const mainNav = document.querySelector('.main-nav');
+
+        if (mobileNavToggle && mainNav) {
+            mobileNavToggle.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
+                mobileNavToggle.classList.toggle('active');
+                const isExpanded = mainNav.classList.contains('active');
+                mobileNavToggle.setAttribute('aria-expanded', isExpanded);
+            });
+
+            // Close mobile nav when a link is clicked
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mainNav.classList.contains('active')) {
+                        mainNav.classList.remove('active');
+                        mobileNavToggle.classList.remove('active');
+                        mobileNavToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+        }
+
+        // --- Live Tool Search ---
+        const searchInput = document.getElementById('toolSearch');
+        const toolCards = document.querySelectorAll('.tool-card');
+        const toolCategories = document.querySelectorAll('.tool-category');
+
+        // Create a no-results message if it doesn't exist
+        let noResultsMessage = document.querySelector('.no-results');
+        if (!noResultsMessage && toolCategories.length > 0) {
+            noResultsMessage = document.createElement('p');
+            noResultsMessage.className = 'no-results';
+            noResultsMessage.textContent = 'No tools found matching your search.';
+            // Insert after the search bar, or at a suitable place
+            const searchSection = document.querySelector('.search-section .container');
+            if (searchSection) {
+                searchSection.appendChild(noResultsMessage);
+            }
+        }
+
+
+        if (searchInput && toolCards.length > 0) {
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                let visibleToolsCount = 0;
+
+                toolCategories.forEach(category => {
+                    let categoryHasVisibleTools = false;
+                    const cardsInCategory = category.querySelectorAll('.tool-card');
+
+                    cardsInCategory.forEach(card => {
+                        const toolName = card.dataset.toolName ? card.dataset.toolName.toLowerCase() : '';
+                        const keywords = card.dataset.keywords ? card.dataset.keywords.toLowerCase() : '';
+
+                        if (toolName.includes(searchTerm) || keywords.includes(searchTerm)) {
+                            card.style.display = 'block';
+                            categoryHasVisibleTools = true;
+                            visibleToolsCount++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    // Hide or show category based on whether it has visible tools
+                    if (searchTerm === '') { // If search is empty, show all categories
+                        category.style.display = 'block';
+                    } else {
+                        if (categoryHasVisibleTools) {
+                            category.style.display = 'block';
+                        } else {
+                            category.style.display = 'none';
+                        }
+                    }
+                });
+
+                // Show or hide no-results message
+                if (noResultsMessage) {
+                    if (visibleToolsCount === 0 && searchTerm !== '') {
+                        noResultsMessage.style.display = 'block';
+                    } else {
+                        noResultsMessage.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // --- Smooth scroll for nav links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // Only prevent default if it's a true hash link within the page
+                if (this.hash !== "" && document.querySelector(this.hash)) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(this.hash);
+                    if (targetElement) {
+                        const headerOffset = document.querySelector('.site-header') ? document.querySelector('.site-header').offsetHeight : 0;
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - headerOffset - 20; // 20px extra spacing
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+
+                        // Update active nav link
+                        document.querySelectorAll('.main-nav a').forEach(navLink => navLink.classList.remove('active'));
+                        if (!this.closest('.footer-links')) { // Don't mark footer links as active nav
+                             this.classList.add('active');
+                        }
+                    }
+                }
+            });
+        });
+    });
+</script>
+
     <!-- ... (All your HTML content from Top Header to Footer) ... -->
 
     <!-- Footer -->
